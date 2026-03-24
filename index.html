@@ -434,11 +434,28 @@
       </div>
     </div>
     <div class="reveal">
-      <p style="font-size:0.88rem; font-weight:300; line-height:1.75; color:var(--text-light); margin-bottom:2rem;">Fill out the form below and it will open in your email app, ready to send directly to me.</p>
-      <div class="form-group">
-        <label for="name">Your Name</label>
-        <input type="text" id="fname" placeholder="Jane Smith">
+      <div id="form-success" style="display:none; padding:1.5rem; background:rgba(107,127,110,0.12); border:1px solid var(--sage-light); margin-bottom:1.5rem;">
+        <p style="color:var(--sage-dark); font-weight:500;">✓ Message sent!</p>
+        <p style="color:var(--text-light); font-size:0.85rem; margin-top:0.3rem;">Thanks for reaching out. I'll get back to you soon.</p>
       </div>
+      <div class="form-group">
+        <label for="fname">Your Name</label>
+        <input type="text" id="fname" name="name" placeholder="Jane Smith">
+      </div>
+      <div class="form-group" style="margin-top:1.2rem;">
+        <label for="femail">Email Address</label>
+        <input type="email" id="femail" name="email" placeholder="jane@example.com">
+      </div>
+      <div class="form-group" style="margin-top:1.2rem;">
+        <label for="fsubj">Subject</label>
+        <input type="text" id="fsubj" name="subject" placeholder="Research collaboration, internship inquiry...">
+      </div>
+      <div class="form-group" style="margin-top:1.2rem;">
+        <label for="fmsg">Message</label>
+        <textarea id="fmsg" name="message" placeholder="Your message here..." style="min-height:130px; width:100%; padding:0.9rem 1.2rem; border:1px solid rgba(107,127,110,0.3); background:var(--cream); font-family:Jost,sans-serif; font-size:0.9rem; font-weight:300; color:var(--text); outline:none; resize:vertical;"></textarea>
+      </div>
+      <button onclick="sendForm()" class="submit-btn" style="margin-top:1.2rem;">Send Message</button>
+    </div>
       <div class="form-group" style="margin-top:1.2rem;">
         <label for="subj">Subject</label>
         <input type="text" id="fsubj" placeholder="Research collaboration, internship inquiry...">
@@ -459,15 +476,27 @@
 
 <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 
-function sendEmail() {
-  var name = document.getElementById('fname').value;
-  var subj = document.getElementById('fsubj').value;
-  var msg = document.getElementById('fmsg').value;
-  var body = 'From: ' + name + '%0A%0A' + msg;
-  var subject = subj || 'Message from trose.com';
-  window.location.href = 'mailto:tyler@trose.com?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent('From: ' + name + '
-
-' + msg);
+async function sendForm() {
+  var data = {
+    name: document.getElementById('fname').value,
+    email: document.getElementById('femail').value,
+    subject: document.getElementById('fsubj').value,
+    message: document.getElementById('fmsg').value
+  };
+  try {
+    const response = await fetch('https://formspree.io/f/xvzvpopj', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify(data)
+    });
+    if (response.ok) {
+      document.getElementById('form-success').style.display = 'block';
+      document.getElementById('fname').value = '';
+      document.getElementById('femail').value = '';
+      document.getElementById('fsubj').value = '';
+      document.getElementById('fmsg').value = '';
+    }
+  } catch(e) { alert('Something went wrong. Please email tyler@trose.com directly.'); }
 }
 
 // Scroll reveal
