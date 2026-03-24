@@ -433,28 +433,22 @@
         <a href="https://www.linkedin.com/in/tyler-misraje" style="color:var(--sage); text-decoration:none;">linkedin.com/in/tyler-misraje</a>
       </div>
     </div>
-    <form class="reveal" action="https://formspree.io/f/xvzvpopj" method="POST">
+    <div class="reveal">
+      <p style="font-size:0.88rem; font-weight:300; line-height:1.75; color:var(--text-light); margin-bottom:2rem;">Fill out the form below and it will open in your email app, ready to send directly to me.</p>
       <div class="form-group">
         <label for="name">Your Name</label>
-        <input type="text" id="name" name="name" placeholder="Jane Smith" required>
+        <input type="text" id="fname" placeholder="Jane Smith">
       </div>
-      <div class="form-group">
-        <label for="email">Email Address</label>
-        <input type="email" id="email" name="email" placeholder="jane@example.com" required>
+      <div class="form-group" style="margin-top:1.2rem;">
+        <label for="subj">Subject</label>
+        <input type="text" id="fsubj" placeholder="Research collaboration, internship inquiry...">
       </div>
-      <div class="form-group">
-        <label for="subject">Subject</label>
-        <input type="text" id="subject" name="subject" placeholder="Research collaboration, internship inquiry...">
+      <div class="form-group" style="margin-top:1.2rem;">
+        <label for="msg">Message</label>
+        <textarea id="fmsg" placeholder="Your message here..." style="min-height:130px; width:100%; padding:0.9rem 1.2rem; border:1px solid rgba(107,127,110,0.3); background:var(--cream); font-family:Jost,sans-serif; font-size:0.9rem; font-weight:300; color:var(--text); outline:none; resize:vertical;"></textarea>
       </div>
-      <div class="form-group">
-        <label for="message">Message</label>
-        <textarea id="message" name="message" placeholder="Your message here..." required></textarea>
-      </div>
-      <button type="submit" class="submit-btn">Send Message</button>
-      <div id="form-success" style="display:none; color:var(--sage-dark); font-size:0.85rem; padding:1rem; border:1px solid var(--sage-light); background: rgba(107,127,110,0.08);">
-        ✓ Thank you for reaching out! This is a demo form — in production, your message would be sent.
-      </div>
-    </form>
+      <button onclick="sendEmail()" class="submit-btn" style="margin-top:1.2rem;">Send Message</button>
+    </div>
   </div>
 </section>
 
@@ -464,6 +458,18 @@
 </footer>
 
 <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+
+function sendEmail() {
+  var name = document.getElementById('fname').value;
+  var subj = document.getElementById('fsubj').value;
+  var msg = document.getElementById('fmsg').value;
+  var body = 'From: ' + name + '%0A%0A' + msg;
+  var subject = subj || 'Message from trose.com';
+  window.location.href = 'mailto:tyler@trose.com?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent('From: ' + name + '
+
+' + msg);
+}
+
 // Scroll reveal
 const observer = new IntersectionObserver((entries) => {
   entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
